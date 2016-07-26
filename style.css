@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #BDC0BA;
+  background-color: #F6C555;
+}
+
+body > header {
+  text-align: center;
+  background-color: #43341B;
+}
+
+main {
+  flex: 1;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+main ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  color: #0C0C0C;
+}
+
+main li article {
+  padding: .5em;
+  margin-bottom: 1em;
+}
+
+main li article img {
+  max-width: 300px;
+  display: block;
+  margin: .5em auto;
+}
+
+main li article time {
+  display: block;
+}
+
+main + footer {
+  text-align: center;
+  background-color: #434343;
+}
