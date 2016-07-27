@@ -1,38 +1,24 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width">
-	<link href="style.css" rel="stylesheet" />
-	<title>寶島書庫</title>
-</head>
-<body>
-	<header>
-		<p>我們在海洋中閱讀</p>
-	</header>
-	<main>
+---
+title: 書單
+---
 		<ul>
+			{% for book in site.data.books %}
 			<li>
 				<article>
 					<header>
-						<img src="https://www.gitbook.com/content/book/chusiang/working-on-gnu-linux/cover.jpg" alt="完全用 GNU/Linux 工作" />
-						<span>Chu-Siang Lai</span>
-						<time>2015-05-09</time>
+						<img src="{{ book.cover }}" alt="{{ book.title }}" />
+						<span>{{ book.author }}</span>
+						{% if book.date %}<time>{{ book.date }}</time>{% endif %}
 					</header>
 					<p>
-						GNU/Linux 至今已經相當成熟並足以應付日常生活之使用，凍仁也於 2009 年開始使用它來工作至今，將藉由此書來撰寫較有系統的文章及分享些上班經驗。
+						{{ book.info }}
 					</p>
 					<footer>
-						Link: <a href="https://www.gitbook.com/book/chusiang/working-on-gnu-linux/details">Details</a>
-						License: <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/tw/">CC BY-NC-SA 3.0 TW</a>
-						Download: <a href="https://www.gitbook.com/download/epub/book/chusiang/working-on-gnu-linux" download>EPUB</a>
+						Link: <a href="{{ book.link }}">Details</a><br/>
+						License: <a href="{{ book.license }}">{{ book.license }}</a><br/>
+						Download: <a href="{{ book.download }}" download>EPUB</a>
 					</footer>
 				</article>
 			</li>
+			{% endfor %}
 		</ul>
-	</main>
-	<footer>
-		<p>寶島書庫</p>
-	</footer>
-</body>
-</html>
