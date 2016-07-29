@@ -40,6 +40,24 @@ main li article time {
   display: block;
 }
 
+main li article a[download] {
+  display: inline-flex;
+  float: right;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 50%;
+  border: 2px solid;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  align-items: center;
+  justify-content: center;
+}
+
+main li article a[download]:hover {
+  color: #434343;
+}
+
 main + footer {
   padding: .5em;
   text-align: center;

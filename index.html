@@ -14,9 +14,13 @@ title: 書單
 						{{ book.info }}
 					</p>
 					<footer>
+						<a href="{{ book.download }}" download>
+							<svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+								<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+							</svg>
+						</a>
 						Link: <a href="{{ book.link }}">Details</a><br/>
-						License: <a href="{{ book.license }}">{{ book.license }}</a><br/>
-						Download: <a href="{{ book.download }}" download>EPUB</a>
+						License: <a href="{{ book.license }}">{{ book.license }}</a>
 					</footer>
 				</article>
 			</li>
