@@ -19,8 +19,8 @@ title: 書單
 								<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
 							</svg>
 						</a>
-						Link: <a href="{{ book.link }}">Details</a><br/>
-						License: <a href="{{ book.license }}">{{ book.license }}</a>
+						{% include license.html license=book.license %}
+						Link: <a href="{{ book.link }}">Details</a>
 					</footer>
 				</article>
 			</li>

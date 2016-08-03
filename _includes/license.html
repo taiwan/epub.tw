@@ -1,0 +1,6 @@
+{% assign words = include.license | split: '/' %}
+{% if words contains 'cc0' %}
+<a href="{{ include.license }}"><img src="http://mirrors.creativecommons.org/presskit/buttons/88x31/svg/cc-zero.svg" /></a>
+{% elsif words contains 'by-nc-sa'%}
+<a href="{{ include.license }}"><img src="http://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-nc-sa.svg" /></a>
+{% endif %}

@@ -30,7 +30,7 @@ main li article {
   margin-bottom: 1em;
 }
 
-main li article img {
+main li article header img {
   max-width: 300px;
   display: block;
   margin: .5em auto;
@@ -56,6 +56,16 @@ main li article a[download] {
 
 main li article a[download]:hover {
   color: #434343;
+}
+
+main li article a[download] + a {
+	float: right;
+	margin-right: .5em;
+	padding-top: 3px;
+}
+
+main li article a[download] + a img {
+	height: 31px;
 }
 
 main + footer {
