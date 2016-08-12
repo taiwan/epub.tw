@@ -14,13 +14,17 @@ title: 書單
 						{{ book.info }}
 					</p>
 					<footer>
-						<a href="{{ book.download }}" download>
+						{% include license.html license=book.license %}
+						<a href="{{ book.download }}" title="EPUB" download>
 							<svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 								<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
 							</svg>
 						</a>
-						{% include license.html license=book.license %}
-						Link: <a href="{{ book.link }}">Details</a>
+						<a href="{{ book.link }}">
+							<svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+								<path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+							</svg>
+						</a>
 					</footer>
 				</article>
 			</li>

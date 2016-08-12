@@ -40,7 +40,7 @@ main li article time {
   display: block;
 }
 
-main li article a[download] {
+main li article a:not(:first-child) {
   display: inline-flex;
   float: right;
   text-decoration: none;
@@ -52,19 +52,14 @@ main li article a[download] {
   line-height: 2em;
   align-items: center;
   justify-content: center;
+  margin-right: .5em;
 }
 
-main li article a[download]:hover {
+main li article a:hover {
   color: #434343;
 }
 
-main li article a[download] + a {
-	float: right;
-	margin-right: .5em;
-	padding-top: 3px;
-}
-
-main li article a[download] + a img {
+main li article a img {
 	height: 31px;
 }
 
