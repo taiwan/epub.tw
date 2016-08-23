@@ -3,13 +3,25 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  color: #BDC0BA;
+  color: #0C0C0C;
   background-color: #F6C555;
 }
 
 body > header {
+  color: #BDC0BA;
   text-align: center;
   background-color: #43341B;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: #43341B;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
 main {
@@ -22,7 +34,6 @@ main ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  color: #0C0C0C;
 }
 
 main li article {
@@ -67,9 +78,4 @@ main + footer {
   padding: .5em;
   text-align: center;
   background-color: #434343;
-}
-
-main + footer a {
-  text-decoration: none;
-  color: inherit;
 }
