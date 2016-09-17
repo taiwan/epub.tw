@@ -13,6 +13,10 @@ body > header {
   background-color: #43341B;
 }
 
+h1 {
+  font-size: large;
+}
+
 hr {
   border: none;
   height: 1px;
@@ -24,10 +28,22 @@ a {
   color: inherit;
 }
 
+article > header {
+  text-align: center;
+}
+
+section {
+  margin: 0 1em;
+}
+
 main {
   flex: 1;
   max-width: 800px;
   margin: 0 auto;
+}
+
+main a {
+  border-bottom: 1px dashed;
 }
 
 main ul {
@@ -42,13 +58,19 @@ main li article {
 }
 
 main li article header img {
-  max-width: 300px;
+  width: 300px;
+  height: 400px;
+  object-fit: contain;
   display: block;
   margin: .5em auto;
 }
 
 main li article time {
   display: block;
+}
+
+main li article a {
+  border-bottom: none;
 }
 
 main li article a:not(:first-child) {
@@ -74,7 +96,18 @@ main li article a img {
 	height: 31px;
 }
 
+main li strong {
+  display: block;
+  margin-top: 1em;
+}
+
+main li strong + a {
+  display: inline-block;
+  margin-left: 2em;
+}
+
 main + footer {
+  color: #BDC0BA;
   padding: .5em;
   text-align: center;
   background-color: #434343;
