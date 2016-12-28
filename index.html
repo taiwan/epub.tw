@@ -1,5 +1,5 @@
 ---
-title: 書單
+title:
 ---
 		<p style="text-align: center; margin: 1em">
 			這裡收集了一些採用<a href="http://www.creativecommons.org.tw/explore">創用CC</a>授權釋出的 EPUB 電子書。
@@ -10,6 +10,21 @@ title: 書單
 			<a href="about.html">了解更多</a>
 		</p>
 		<hr>
+{% if site.posts != empty %}
+		<h3>最新消息</h3>
+		<ul>
+	{% for post in site.posts limit:3 %}
+			<li>
+				<a href="{{ post.url}}">
+					{{ post.title }}
+					<time>{{ post.date | date: "%Y-%m-%d" }}</time>
+				</a>
+			</li>
+	{% endfor %}
+		</ul>
+		<hr>
+{% endif %}
+		<h3>書庫收藏</h3>
 		<ul>
 			{% for book in site.data.books %}
 			<li>

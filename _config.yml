@@ -1,6 +1,16 @@
+title: "寶島書庫"
+permalink: posts/:year-:month-:day-:title.html
 defaults:
   -
     scope:
       path: "" # an empty string here means all files in the project
     values:
       layout: "default"
+  -
+    scope:
+      type: "posts"
+    values:
+      layout: "post"
+gems:
+  - jekyll-avatar
+  - jekyll-feed

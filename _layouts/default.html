@@ -4,8 +4,9 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width">
 	<meta property="og:image" content="http://epub.tw/logo.png">
-	<link href="style.css" rel="stylesheet" />
-	<title>寶島書庫</title>
+	<link href="/style.css" rel="stylesheet" />
+	{% feed_meta %}
+	<title>{% if page.title %} {{ page.title }} &mdash; {% endif %}寶島書庫</title>
 </head>
 <body>
 	<header>

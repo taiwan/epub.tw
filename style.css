@@ -17,6 +17,10 @@ h1 {
   font-size: large;
 }
 
+h3 {
+	padding-left: 1em;
+}
+
 hr {
   border: none;
   height: 1px;
@@ -44,12 +48,18 @@ main {
 
 main a {
   border-bottom: 1px dashed;
+  padding-bottom: .3em;
 }
 
 main ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+main li a > time {
+	float: left;
+	margin: 0 1em;
 }
 
 main li article {
@@ -111,4 +121,24 @@ main + footer {
   padding: .5em;
   text-align: center;
   background-color: #434343;
+}
+
+#post {
+	padding: 0 1em;
+}
+
+#post footer {
+	margin: 0 auto;
+	display: flex;
+	padding-top: 1em;
+	border-top: 1px solid;
+}
+
+#post footer figure {
+	text-align: center;
+	margin: 0;
+}
+
+#post footer p {
+	margin-left: 1em;
 }

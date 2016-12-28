@@ -1,0 +1,18 @@
+---
+layout: default
+---
+<article id="post">
+	<header>
+		<h2>{{ page.title }}</h2>
+		<time>{{ page.date | date: "%Y-%m-%d" }}</time>
+	</header>
+	{{ content }}
+	<footer>
+		{% assign author = site.data.authors[page.author] %}
+		<figure>
+			{% avatar {{page.author}} %}
+			<figcaption>{{ author.name }}</figcaption>
+		</figure>
+		<p>{{ author.about }}</p>
+	</footer>
+</article>
