@@ -123,6 +123,13 @@ main + footer {
   background-color: #434343;
 }
 
+h3 + a {
+	float: right;
+	border: none;
+	margin-top: -2.7em;
+	font-weight: bold;
+}
+
 #post {
 	padding: 0 1em;
 }

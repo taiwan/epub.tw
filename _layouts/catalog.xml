@@ -18,7 +18,9 @@ layout: null
   <entry>
     <title>{{ book.title }}</title>
     <id>{{ book.link}}</id>
-    <updated>{{ book.date | date_to_xmlschema }}</updated>
+    <published>{{ book.date | date_to_xmlschema }}</published>
+    <updated>{% if book.updated %}{{ book.updated | date_to_xmlschema }}{% else %}{{ book.date | date_to_xmlschema }}{% endif %}</updated>
+    <summary>{{ book.info | xml_escape }}</summary>
     <author>
       <name>{{ book.author }}</name>
     </author>
