@@ -26,7 +26,7 @@ title:
 		<hr>
 {% endif %}
 		<h3>書庫收藏</h3>
-		<a href="/opds.xml">OPDS</a>
+		<a href="/opds.xml">CATALOG</a>
 		<ul>
 			{% assign books = site.books | sort: 'date' %}
 			{% for book in books reversed %}
