@@ -26,13 +26,14 @@ title:
 {% endif %}
 		<h3>書庫收藏</h3>
 		<ul>
-			{% for book in site.data.books %}
+			{% assign books = site.books | sort: 'date' %}
+			{% for book in books reversed %}
 			<li>
 				<article>
 					<header>
 						<img src="{{ book.cover }}" alt="{{ book.title }}" />
 						<span>{{ book.author }}</span>
-						{% if book.date %}<time>{{ book.date }}</time>{% endif %}
+						{% if book.date %}<time>{{ book.date | date: "%Y-%m-%d" }}</time>{% endif %}
 					</header>
 					<p>
 						{{ book.info }}

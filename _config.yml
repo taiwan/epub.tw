@@ -1,5 +1,7 @@
 title: "寶島書庫"
 permalink: posts/:year-:month-:day-:title.html
+collections:
+  - books
 defaults:
   -
     scope:
