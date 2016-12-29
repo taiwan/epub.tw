@@ -1,0 +1,31 @@
+---
+layout: null
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>{{ site.url }}</id>
+  <link rel="self" href="{{ page.url }}.xml" type="application/atom+xml;profile=opds-catalog;kind=navigation"/>
+  <link rel="start" href="/opds.xml" type="application/atom+xml;profile=opds-catalog;kind=navigation"/>
+  <title>{{ site.title }}</title>
+  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <author>
+    <name>{{ site.title }}</name>
+    <uri>{{ site.url }}</uri>
+  </author>
+{% assign category = page.id | replace: "/categories/" %}
+{% assign books = site.books | where:'category', category %}
+{% for book in books %}
+  <entry>
+    <title>{{ book.title }}</title>
+    <id>{{ book.link}}</id>
+    <updated>{{ book.date | date_to_xmlschema }}</updated>
+    <author>
+      <name>{{ book.author }}</name>
+    </author>
+    <category term="{{ page.name }}" label="{{ page.title }}"/>
+    <link rel="http://opds-spec.org/acquisition" href="{{ book.download }}" type="application/epub+zip"/>
+    <link rel="http://opds-spec.org/image" href="{{ book.cover }}" type="image/png"/>
+    <link rel="http://opds-spec.org/image/thumbnail" href="{{ book.cover }}" type="image/png"/>
+  </entry>
+{% endfor %}
+</feed>

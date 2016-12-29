@@ -1,7 +1,10 @@
 title: "寶島書庫"
 permalink: posts/:year-:month-:day-:title.html
 collections:
-  - books
+  books:
+  categories:
+      output: true
+      output_ext: xml
 defaults:
   -
     scope:
@@ -13,6 +16,11 @@ defaults:
       type: "posts"
     values:
       layout: "post"
+  -
+    scope:
+      type: "categories"
+    values:
+      layout: "catalog"
 gems:
   - jekyll-avatar
   - jekyll-feed
