@@ -13,8 +13,8 @@ layout: null
     <uri>{{ site.url }}</uri>
   </author>
 {% assign category = page.id | replace: "/categories/" %}
-{% assign books = site.books | where:'category', category %}
-{% for book in books %}
+{% assign books = site.books | where: 'category', category | sort: 'date' %}
+{% for book in books reversed %}
   <entry>
     <title>{{ book.title }}</title>
     <id>{{ book.link}}</id>

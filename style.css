@@ -111,9 +111,13 @@ main li strong {
   margin-top: 1em;
 }
 
-main li strong + a {
+main li strong ~ a {
   display: inline-block;
   margin-left: 2em;
+}
+
+main li strong ~ a + a {
+	margin-left: 1em;
 }
 
 main + footer {
