@@ -1,0 +1,19 @@
+---
+title: 《美國的誕生》上架
+author: kidwm
+---
+既然本站以推廣相關出版技術為口號，怎麼可以不來下海排一本書試試呢？
+
+感謝想想論壇和作者藍弋丰採用 CC 授權釋出專欄連載內容，讓我得以結集成本書：
+
+![美國的誕生](https://raw.githubusercontent.com/kidwm/usa-birth-epub/master/EPUB/cover.png)
+
+對 EPUB 編排有興趣的話，原始碼放在: https://github.com/kidwm/usa-birth-epub
+
+想欣賞成果，就直接下載：https://github.com/kidwm/usa-birth-epub/releases/download/1.0/usa-birth.epub
+
+話說回來，這本書的題材為整個過程省下了不少工夫，由於美國聯邦政府的出版品直接釋出到公有領域，本書的插圖全都是取用 Wikipedia 上來自公有領域的圖片。
+
+但最花時間的也還是蒐羅這些歷史圖片，必須清查核對原始來源的授權。
+
+最後，希望早點有台灣史相關著作上架啊！
