@@ -25,7 +25,7 @@ layout: null
       <name>{{ book.author }}</name>
     </author>
     <category term="{{ page.name }}" label="{{ page.title }}"/>
-    <link rel="http://opds-spec.org/acquisition" href="{{ book.download }}" type="application/epub+zip"/>
+    <link rel="http://opds-spec.org/acquisition" href="{{ book.download | xml_escape }}" type="application/epub+zip"/>
     <link rel="http://opds-spec.org/image" href="{{ book.cover }}" type="image/png"/>
     <link rel="http://opds-spec.org/image/thumbnail" href="{{ book.cover }}" type="image/png"/>
   </entry>
