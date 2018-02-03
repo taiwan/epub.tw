@@ -33,7 +33,7 @@ title:
 			<li>
 				<article>
 					<header>
-						<img src="{{ book.cover }}" alt="{{ book.title }}" />
+						{% if book.cover %}<img src="{{ book.cover }}" alt="{{ book.title }}" />{% endif %}
 						<span>{{ book.author }}</span>
 						{% if book.date %}<time>{{ book.date | date: "%Y-%m-%d" }}</time>{% endif %}
 					</header>
