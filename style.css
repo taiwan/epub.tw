@@ -87,8 +87,6 @@ main li article a:not(:first-child) {
   border-radius: 50%;
   border: 2px solid;
   width: 2em;
-  height: 2em;
-  line-height: 2em;
   align-items: center;
   justify-content: center;
   margin-right: .5em;
@@ -123,7 +121,7 @@ main + footer {
   background-color: #434343;
 }
 
-h3 + a {
+h2 + a {
 	float: right;
 	border: none;
 	margin-top: -2.7em;
