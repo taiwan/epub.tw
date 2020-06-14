@@ -1,0 +1,154 @@
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #0C0C0C;
+  background-color: #F6C555;
+}
+
+body > header {
+  color: #BDC0BA;
+  text-align: center;
+  background-color: #43341B;
+}
+
+h1 {
+  font-size: large;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: #43341B;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+article > header {
+  text-align: center;
+}
+
+section {
+  margin: 0 1em;
+}
+
+main {
+  flex: 1;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+main a {
+  border-bottom: 1px dashed;
+  padding-bottom: .3em;
+}
+
+main ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+main li a > time {
+	float: left;
+	margin: 0 1em;
+}
+
+main li article {
+  padding: .5em;
+  margin-bottom: 1em;
+}
+
+main li article header img {
+  width: 300px;
+  height: 400px;
+  object-fit: contain;
+  display: block;
+  margin: .5em auto;
+}
+
+main li article time {
+  display: block;
+}
+
+main li article a {
+  border-bottom: none;
+}
+
+main li article a:not(:first-child) {
+  display: inline-flex;
+  float: right;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 50%;
+  border: 2px solid;
+  width: 2em;
+  align-items: center;
+  justify-content: center;
+  margin-right: .5em;
+}
+
+main li article a:hover {
+  color: #434343;
+}
+
+main li article a img {
+	height: 31px;
+}
+
+main li strong {
+  display: block;
+  margin: 1em 0 0 1em;
+}
+
+main li strong ~ a {
+  display: inline-block;
+  margin-left: 2em;
+}
+
+main li strong ~ a + a {
+	margin-left: 1em;
+}
+
+main + footer {
+  color: #BDC0BA;
+  padding: .5em;
+  text-align: center;
+  background-color: #434343;
+}
+
+h2 + a {
+	float: right;
+	border: none;
+	margin-top: -2.7em;
+	font-weight: bold;
+}
+
+#post {
+	padding: 0 1em;
+}
+
+#post img {
+	display: block;
+	margin: 0 auto;
+}
+
+#post footer {
+	margin: 0 auto;
+	display: flex;
+	padding-top: 1em;
+	border-top: 1px solid;
+}
+
+#post footer figure {
+	text-align: center;
+	margin: 0;
+}
+
+#post footer p {
+	margin-left: 1em;
+}
