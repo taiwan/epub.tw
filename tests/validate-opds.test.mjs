@@ -185,9 +185,9 @@ changeHeader('missing self link', 'opds.xml', (xml) => link(xml, 'self', () => '
 changeHeader('duplicate self links', 'opds.xml', (xml) => link(xml, 'self', (tag) => tag + tag));
 changeHeader('wrong self link media type', 'opds.xml', (xml) => link(xml, 'self', (tag) => tag.replace('kind=navigation', 'kind=acquisition')));
 changeHeader('missing start link', BIO, (xml) => link(xml, 'start', () => ''));
-changeHeader('incorrect start href', BIO, (xml) => link(xml, 'start', (tag) => tag.replace('https://epub.tw/opds.xml', 'https://example.org/opds.xml')));
+changeHeader('incorrect start href', BIO, (xml) => link(xml, 'start', (tag) => tag.replace('https://www.epub.tw/opds.xml', 'https://example.org/opds.xml')));
 changeHeader('extra start attributes', BIO, (xml) => link(xml, 'start', (tag) => tag.replace('/>', ' title="extra"/>')));
-changeHeader('incorrect up link', BIO, (xml) => link(xml, 'up', (tag) => tag.replace('https://epub.tw/opds.xml', 'https://epub.tw/')));
+changeHeader('incorrect up link', BIO, (xml) => link(xml, 'up', (tag) => tag.replace('https://www.epub.tw/opds.xml', 'https://www.epub.tw/')));
 mutation('missing navigation category', 'opds.xml', (xml) => entry(xml, () => ''));
 mutation('extra navigation category', 'opds.xml', (xml) => entry(xml, (tag) => tag + tag));
 changeBook('missing navigation identifier', 'opds.xml', (xml) => element(xml, 'id'));
@@ -288,11 +288,11 @@ changeBook('price on a generic acquisition', SOCIETY, (xml) => link(xml, ACQUISI
 // Cover host, filesystem boundary, and actual image bytes rather than filenames.
 for (const [name, host] of [
   ['external host', 'example.org'],
-  ['credentials', 'reader@epub.tw'],
-  ['explicit default HTTPS port', 'epub.tw:443'],
-  ['nondefault port', 'epub.tw:8443'],
+  ['credentials', 'reader@www.epub.tw'],
+  ['explicit default HTTPS port', 'www.epub.tw:443'],
+  ['nondefault port', 'www.epub.tw:8443'],
 ]) {
-  changeBook(`cover URL with ${name}`, HISTORY, (xml) => link(xml, 'http://opds-spec.org/image', (tag) => tag.replace('https://epub.tw/', `https://${host}/`)));
+  changeBook(`cover URL with ${name}`, HISTORY, (xml) => link(xml, 'http://opds-spec.org/image', (tag) => tag.replace('https://www.epub.tw/', `https://${host}/`)));
 }
 changeBook('cover extension with incorrect declared MIME', HISTORY, (xml) => link(xml, 'http://opds-spec.org/image', (tag) => tag.replace('image/png', 'image/jpeg')));
 changeBook('cover URL escaping the build directory after percent-decoding', HISTORY, (xml) => link(xml, 'http://opds-spec.org/image', (tag) => tag.replace('/images/covers/usa-birth.png', '/images/%2e%2e%2f%2e%2e%2fescape.png')), /Path outside build/);
@@ -365,3 +365,11 @@ test('reference parity does not trim meaningful zero-width no-break characters',
   edit(dist, BIO, (xml) => xml.replace('<summary type="text">', '<summary type="text">\ufeff'));
   assert.throws(() => validateOpds(dist, build), /Preview parity failed/);
 });
+
+
+// A host move must not re-identify existing subscriptions or books.
+changeHeader('feed identity changed to the current serving host', 'opds.xml', (xml) => element(xml, 'id', '<id>https://www.epub.tw/opds.xml</id>'));
+changeBook('book identity changed to the current serving host', BIO, (xml) => element(xml, 'id', '<id>https://www.epub.tw/books/monkeypotion/</id>'));
+changeBook('navigation identity changed to the current serving host', 'opds.xml', (xml) => element(xml, 'id', '<id>https://www.epub.tw/categories/biography.xml</id>'));
+changeHeader('self link still using the old host', BIO, (xml) => link(xml, 'self', (tag) => tag.replace('https://www.epub.tw/', 'https://epub.tw/')));
+changeBook('book page still using the old host', BIO, (xml) => link(xml, 'alternate', (tag) => tag.replace('https://www.epub.tw/', 'https://epub.tw/')));

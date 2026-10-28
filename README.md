@@ -28,6 +28,6 @@ npm run preview
 
 ## OPDS 與部署
 
-`/opds.xml` 是 OPDS 1.2 分類導覽；四個 `/categories/*.xml` 為取得目錄，空分類亦保留。Gumroad 等中介網頁使用 `text/html` 配合 EPUB indirect acquisition，不冒充直接下載或無條件 open-access。書目 ID 使用本站固定頁面網址。
+`/opds.xml` 是 OPDS 1.2 分類導覽；四個 `/categories/*.xml` 為取得目錄，空分類亦保留。Gumroad 等中介網頁使用 `text/html` 配合 EPUB indirect acquisition，不冒充直接下載或無條件 open-access。Atom ID 保留既有 `https://epub.tw/` 識別值，不隨網域搬遷改變；實際頁面、封面與目錄連結使用 `https://www.epub.tw/`。
 
-GitHub Actions 執行 schema、TypeScript、build 與測試。正式分支為 `main`，GitHub Pages 使用 Actions；保留自訂網域 `epub.tw` 與 `public/CNAME`，不需要變更 DNS。
+GitHub Actions 執行 schema、TypeScript、build 與測試。正式分支為 `main`，GitHub Pages 使用 Actions；正式自訂網域為 `www.epub.tw`，與 `astro.config.mjs`、`public/CNAME` 及 OPDS 連結一致。`epub.tw` 由網域端轉址至 `https://www.epub.tw`，並應保留路徑與查詢參數；轉址與 DNS 設定不由此儲存庫部署。

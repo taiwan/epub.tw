@@ -35,7 +35,7 @@ test('navigation preserves four legacy category routes and identifies acquisitio
   assert.equal((xml.match(/<entry>/g) ?? []).length, 4);
   assert.ok(xml.includes(`type="${NAVIGATION_TYPE}"`));
   for (const category of Object.keys(categories)) {
-    assert.ok(xml.includes(`href="https://epub.tw/categories/${category}.xml" type="${ACQUISITION_TYPE}"`));
+    assert.ok(xml.includes(`href="https://www.epub.tw/categories/${category}.xml" type="${ACQUISITION_TYPE}"`));
   }
   assert.ok(!xml.includes('http://opds-spec.org/acquisition"'));
 });
@@ -80,7 +80,7 @@ test('empty covers emit no image link; JPG and PNG covers have their correct MIM
   assert.ok(!absent.includes('http://opds-spec.org/image'));
   for (const [cover, mime] of [['/images/cover.jpg', 'image/jpeg'], ['/images/cover.png', 'image/png']]) {
     const xml = renderAcquisitionFeed('society', categories.society, [book('cover', { cover })]);
-    assert.ok(xml.includes(`href="https://epub.tw${cover}" type="${mime}"`));
+    assert.ok(xml.includes(`href="https://www.epub.tw${cover}" type="${mime}"`));
     assert.equal((xml.match(/http:\/\/opds-spec.org\/image/g) ?? []).length, 1);
   }
   assert.throws(() => renderAcquisitionFeed('society', categories.society, [book('bad', { cover: '/cover.webp' })]), /Unsupported OPDS cover/);
@@ -126,4 +126,19 @@ test('future metadata updates advance a feed beyond the maintained catalog revis
   const xml = renderAcquisitionFeed('society', categories.society, [book('future', { updatedAt: '2027-01-02' })]);
   assert.equal(xml.match(/<updated>(.*?)<\/updated>/)?.[1], '2027-01-02T00:00:00Z');
   assert.equal(renderNavigationFeed([book('future', { updatedAt: '2027-01-02' })], categories).match(/<updated>(.*?)<\/updated>/)?.[1], '2027-01-02T00:00:00Z');
+});
+
+test('host migration preserves Atom identities and namespace while moving navigation and book links', () => {
+  const navigation = renderNavigationFeed([book()], categories);
+  const acquisition = renderAcquisitionFeed('society', categories.society, [book()]);
+  assert.ok(navigation.includes('<id>https://epub.tw/opds.xml</id>'));
+  assert.ok(navigation.includes('<id>https://epub.tw/categories/society.xml</id>'));
+  assert.ok(acquisition.includes('<id>https://epub.tw/books/example/</id>'));
+  assert.ok(acquisition.includes('xmlns:epubtw="https://epub.tw/ns/catalog"'));
+  assert.ok(acquisition.includes('rel="alternate" href="https://www.epub.tw/books/example/"'));
+  for (const xml of [navigation, acquisition]) {
+    assert.ok(xml.includes('<uri>https://www.epub.tw/</uri>'));
+    assert.ok(xml.includes('rel="start" href="https://www.epub.tw/opds.xml"'));
+    assert.ok(!xml.includes('href="https://epub.tw/'));
+  }
 });

@@ -1,5 +1,8 @@
 /** OPDS 1.2 / Atom serialization. https://specs.opds.io/opds-1.2.html */
-export const SITE_URL = 'https://epub.tw';
+export const SITE_URL = 'https://www.epub.tw';
+// Atom IDs and extension namespaces identify resources, not their current location.
+// Preserve them across host changes (RFC 4287 §4.2.6).
+const ID_BASE_URL = 'https://epub.tw';
 export const NAVIGATION_TYPE = 'application/atom+xml;profile=opds-catalog;kind=navigation';
 export const ACQUISITION_TYPE = 'application/atom+xml;profile=opds-catalog;kind=acquisition';
 const EPUB_TYPE = 'application/epub+zip';
@@ -68,7 +71,7 @@ function feed(title: string, path: string, kind: 'navigation' | 'acquisition', u
   const type = kind === 'navigation' ? NAVIGATION_TYPE : ACQUISITION_TYPE;
   return `<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/terms/" xmlns:opds="http://opds-spec.org/2010/catalog" xmlns:epubtw="https://epub.tw/ns/catalog" xml:lang="zh-Hant">
-  <id>${escapeXml(absoluteUrl(path))}</id>
+  <id>${escapeXml(new URL(path, ID_BASE_URL).href)}</id>
   <title>${escapeXml(title)}</title>
   <updated>${timestamp(updated)}</updated>
   <author><name>寶島書庫</name><uri>${SITE_URL}/</uri></author>
@@ -110,7 +113,7 @@ function entry(book: OpdsBook, categoryLabel: string): string {
     acquisition.type === 'web' ? `<opds:indirectAcquisition type="${EPUB_TYPE}"/>` : undefined,
   ));
   return `  <entry>
-    <id>${escapeXml(absoluteUrl(bookUrl))}</id>
+    <id>${escapeXml(new URL(bookUrl, ID_BASE_URL).href)}</id>
     <title>${escapeXml(data.title)}</title>
     <published>${timestamp(data.addedAt)}</published>
     <updated>${timestamp(data.updatedAt)}</updated>
@@ -136,7 +139,7 @@ export function renderNavigationFeed(books: readonly OpdsBook[], categories: Rea
     const categoryBooks = books.filter((book) => book.data.category === category);
     const path = `/categories/${category}.xml`;
     return `  <entry>
-    <id>${escapeXml(absoluteUrl(path))}</id>
+    <id>${escapeXml(new URL(path, ID_BASE_URL).href)}</id>
     <title>${escapeXml(label)}</title>
     <updated>${timestamp(latestUpdate(categoryBooks))}</updated>
     <content type="text">${escapeXml(label)}類書籍，共 ${categoryBooks.length} 本。</content>

@@ -9,7 +9,7 @@ export const bookSchema = z.object({
   contributors: z.array(z.object({name:z.string().min(1),role:z.string().min(1)}).strict()).min(1),
   summary:z.string().min(1),
   cover:z.string().refine((value) => {
-    try { const parsed=new URL(value,'https://epub.tw');return (value.startsWith('/images/covers/') || value.startsWith('https://')) && /\.(png|jpe?g)$/i.test(parsed.pathname); } catch { return false; }
+    try { const parsed=new URL(value,'https://www.epub.tw');return (value.startsWith('/images/covers/') || value.startsWith('https://')) && /\.(png|jpe?g)$/i.test(parsed.pathname); } catch { return false; }
   },'Use a local cover path or HTTPS PNG/JPEG URL.').optional(),
   category:z.enum(['biography','history','society','technology']),
   publishedAt:date.optional(),addedAt:date,updatedAt:date,sourceUrl:url,

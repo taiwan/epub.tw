@@ -84,8 +84,11 @@ export function validateOpds(dist = 'dist', reference) {
     text(root, 'title');
     assert.equal(links(root, 'self').length, 1);
     assert.equal(links(root, 'self')[0].attributes.type, kind);
+    assert.equal(links(root, 'self')[0].attributes.href, `https://www.epub.tw/${path}`);
+    assert.equal(links(root, 'alternate')[0]?.attributes.href, 'https://www.epub.tw/');
+    assert.equal(text(first(root, 'author'), 'uri'), 'https://www.epub.tw/');
     assert.deepEqual(links(root, 'start')[0]?.attributes, {
-      rel: 'start', href: 'https://epub.tw/opds.xml', type: NAV,
+      rel: 'start', href: 'https://www.epub.tw/opds.xml', type: NAV,
     });
     assert.ok(hasAuthor(root), `Missing feed author: ${path}`);
     if (reference) {
@@ -98,7 +101,7 @@ export function validateOpds(dist = 'dist', reference) {
   const root = loadFeed('opds.xml', NAV);
   const rootEntries = children(root, 'entry');
   assert.equal(rootEntries.length, CATEGORIES.length);
-  const expectedRoutes = new Set(CATEGORIES.map((category) => `https://epub.tw/categories/${category}.xml`));
+  const expectedRoutes = new Set(CATEGORIES.map((category) => `https://www.epub.tw/categories/${category}.xml`));
   const actualRoutes = new Set();
   for (const entry of rootEntries) {
     text(entry, 'id');
@@ -107,6 +110,7 @@ export function validateOpds(dist = 'dist', reference) {
     const subsection = links(entry, 'subsection');
     assert.equal(subsection.length, 1);
     assert.equal(subsection[0].attributes.type, ACQ);
+    assert.equal(text(entry, 'id'), subsection[0].attributes.href.replace('https://www.epub.tw/', 'https://epub.tw/'));
     actualRoutes.add(subsection[0].attributes.href);
   }
   assert.deepEqual(actualRoutes, expectedRoutes);
@@ -117,7 +121,7 @@ export function validateOpds(dist = 'dist', reference) {
   let imageCount = 0;
   for (const category of CATEGORIES) {
     const feed = loadFeed(`categories/${category}.xml`, ACQ);
-    assert.equal(links(feed, 'up')[0]?.attributes.href, 'https://epub.tw/opds.xml');
+    assert.equal(links(feed, 'up')[0]?.attributes.href, 'https://www.epub.tw/opds.xml');
     const addedDates = [];
     for (const entry of children(feed, 'entry')) {
       const entryId = text(entry, 'id');
@@ -138,7 +142,7 @@ export function validateOpds(dist = 'dist', reference) {
       assert.ok(hasAuthor(entry), entryId);
       assert.ok(/^(?:CC |CC0(?: |$))/.test(text(entry, 'rights')), entryId);
       assert.equal(links(entry, 'license').length, 1);
-      assert.equal(links(entry, 'alternate')[0]?.attributes.href, entryId);
+      assert.equal(links(entry, 'alternate')[0]?.attributes.href, entryId.replace('https://epub.tw/', 'https://www.epub.tw/'));
       const acquisitions = children(entry, 'link').filter((link) =>
         link.attributes.rel?.startsWith('http://opds-spec.org/acquisition'));
       assert.ok(acquisitions.length, entryId);
@@ -162,9 +166,9 @@ export function validateOpds(dist = 'dist', reference) {
       for (const image of links(entry, 'http://opds-spec.org/image')) {
         imageCount++;
         const imageUrl = new URL(image.attributes.href);
-        assert.equal(imageUrl.host, 'epub.tw');
+        assert.equal(imageUrl.host, 'www.epub.tw');
         assert.ok(!imageUrl.username && !imageUrl.password);
-        assert.equal(image.attributes.href.match(/^(?:[a-z][a-z\d+.-]*:)?\/\/([^/?#]*)/i)?.[1], 'epub.tw');
+        assert.equal(image.attributes.href.match(/^(?:[a-z][a-z\d+.-]*:)?\/\/([^/?#]*)/i)?.[1], 'www.epub.tw');
         const path = localUrlPath(dist, image.attributes.href);
         assert.ok(isFile(path), path);
         const magic = readFileSync(path).subarray(0, 8);
