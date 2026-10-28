@@ -44,3 +44,15 @@ test('all canonical and Open Graph locations use the www host without changing p
   assert.ok(read('about.html').includes('https://www.epub.tw/opds.xml'));
   assert.ok(read('posts/2016-12-30-opds-catalog.html').includes('https://www.epub.tw/opds.xml'));
 });
+
+
+test('OPDS announcement images follow the page origin and retain original bytes',()=>{
+  const html=read('posts/2016-12-30-opds-catalog.html');
+  const images=[...html.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/g)].map((match)=>match[1]);
+  const expected=['01','02','03'].map((n)=>`/images/aldiko_opds_${n}.png`);
+  assert.deepEqual(images,expected);
+  for(const src of images){
+    for(const origin of ['http://www.epub.tw','https://www.epub.tw'])assert.equal(new URL(src,origin).origin,origin);
+    assert.deepEqual(readFileSync(path.join(root,src)),readFileSync(path.join('public',src)));
+  }
+});
