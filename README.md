@@ -1,6 +1,6 @@
 # 寶島書庫 · epub.tw
 
-使用 Astro + TypeScript 的靜態 EPUB 書目網站。只收錄提供 EPUB、且明確採用創用 CC 授權的來源；不保存書檔。
+使用 Astro + TypeScript 的靜態 EPUB 書目網站。只收錄提供 EPUB、且明確採用創用 CC 授權或 CC0 宣告的來源；不保存書檔。
 
 ## 開發與驗證
 

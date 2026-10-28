@@ -2,7 +2,7 @@
 import Mark from '../components/Mark.astro';
 import '../styles/global.css';
 interface Props {title?:string;description?:string;active?:'books'|'posts'|'about';image?:string;}
-const {title,description='收藏採用創用 CC 授權的 EPUB 電子書，讓好書被更多人讀見。',active,image}=Astro.props;
+const {title,description='收錄採用創用 CC 授權或 CC0 宣告的 EPUB 電子書，讓好書被更多人讀見。',active,image}=Astro.props;
 const pageTitle=title?`${title}｜寶島書庫 epub.tw`:'寶島書庫 epub.tw｜一本書，一片新的海。';
 const canonical=new URL(Astro.url.pathname,Astro.site);
 ---

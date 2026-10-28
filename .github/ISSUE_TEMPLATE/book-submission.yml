@@ -1,5 +1,5 @@
 name: 推薦 EPUB 書籍
-description: 推薦明確採用創用 CC 授權且提供 EPUB 的來源。
+description: 推薦明確採用創用 CC 授權或 CC0 宣告且提供 EPUB 的來源。
 title: "[推薦書籍] "
 body:
   - type: markdown
@@ -40,7 +40,7 @@ body:
   - type: textarea
     id: license
     attributes:
-      label: 創用 CC 授權及證據
+      label: 創用 CC 授權或 CC0 宣告及證據
       description: 請提供名稱、版本、條款網址及來源聲明。
     validations:
       required: true

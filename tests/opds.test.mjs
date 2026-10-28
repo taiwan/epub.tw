@@ -96,6 +96,15 @@ test('XML escaping preserves exact contributor names and roles', () => {
   assert.throws(() => escapeXml('\u0000'), /XML 1.0/);
 });
 
+test('CC0 is preserved as its own declaration, without adding BY or NC conditions', () => {
+  const xml = renderAcquisitionFeed('society', categories.society, [book('cc0', {
+    license: { name: 'CC0 1.0', url: 'https://creativecommons.org/publicdomain/zero/1.0/', evidenceUrl: 'https://example.org/cc0' },
+  })]);
+  assert.ok(xml.includes('<rights>CC0 1.0</rights>'));
+  assert.ok(xml.includes('rel="license" href="https://creativecommons.org/publicdomain/zero/1.0/" type="text/html" title="CC0 1.0"'));
+  assert.ok(!xml.includes('CC BY'));
+});
+
 test('empty categories retain the explicit catalog-revision date and navigation links', () => {
   const xml = renderAcquisitionFeed('history', categories.history, [book()]);
   assert.ok(xml.includes('<feed '));

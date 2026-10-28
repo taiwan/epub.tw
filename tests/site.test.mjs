@@ -11,3 +11,23 @@ test('homepage sorts actual content by added date and puts books before announce
 test('book pages preserve CC and distinguish direct from indirect EPUB acquisition',()=>{const young=read('books/young-power/index.html');for(const text of ['前往 Gumroad 取得 EPUB','依該站的流程取得 EPUB','CC BY-NC-SA 3.0 TW','郝明義','陳季芳','採訪'])assert.ok(young.includes(text));assert.match(read('books/monkeypotion/index.html'),/暫無封面/);assert.match(read('books/usa-birth/index.html'),/下載 EPUB/);for(const id of ['young-power','monkeypotion','usa-birth'])assert.doesNotMatch(read(`books/${id}/index.html`),/下載 PDF|下載 MOBI|lastCheckedAt|<dt>出版日期/);});
 test('output hosts no EPUB files and does not transform original covers',()=>{assert.equal(walk(root).filter((p)=>/\.(epub|mobi|azw3?)$/i.test(p)).length,0);for(const file of ['young-power-original.jpg','usa-birth.png'])assert.deepEqual(readFileSync(path.join(root,'images/covers',file)),readFileSync(path.join('public/images/covers',file)));});
 test('every HTML page has language, canonical URL, skip link and one main heading',()=>{for(const page of walk(root).filter((p)=>p.endsWith('.html'))){const html=readFileSync(page,'utf8');assert.match(html,/<html lang="zh-Hant-TW"/);assert.match(html,/<title>[^<]+<\/title>/);assert.match(html,/rel="canonical" href="https:\/\/epub.tw\//);assert.match(html,/class="skip-link" href="#main"/);assert.equal((html.match(/<h1\b/g)??[]).length,1,page);assert.equal((html.match(/<main\b/g)??[]).length,1,page);}});
+
+test('Plurality preserves CC0 and the official traditional-Chinese EPUB source',()=>{
+  const html=read('books/plurality/index.html');
+  for(const value of ['多元宇宙：協作技術與民主的未來','衛谷倫','唐鳳','多元宇宙社群','CC0 宣告','CC0 1.0','https://creativecommons.org/publicdomain/zero/1.0/','https://github.com/pluralitybook/plurality/releases/latest/download/Plurality-traditional-mandarin.epub','/images/covers/plurality-zh-tw.png'])assert.ok(html.includes(value),value);
+  assert.doesNotMatch(html,/<dt>出版日期/);
+  assert.deepEqual(readFileSync(path.join(root,'images/covers/plurality-zh-tw.png')),readFileSync('public/images/covers/plurality-zh-tw.png'));
+});
+
+test('Pandemic Year preserves all authors, publication date, and indirect Taiwan Kobo acquisition',()=>{
+  const html=read('books/pandemic-year/index.html');
+  for(const value of ['走過疫年：病毒、口罩、疫苗、假新聞之日常疫情','延金芝','葉子松','綠葉','邱爸','周世宗','陳小步','張雅玲','穹蒼明月','CC BY-NC-ND 3.0 TW','datetime="2021-08-16"','前往 Kobo 取得 EPUB','https://www.kobo.com/tw/zh/ebook/jrxvWKBgHD-6GyYeohRKDw','EPUB 3（DRM-Free）','依該站的流程取得 EPUB'])assert.ok(html.includes(value),value);
+  assert.deepEqual(readFileSync(path.join(root,'images/covers/pandemic-year.jpg')),readFileSync('public/images/covers/pandemic-year.jpg'));
+});
+
+test('Zhuyin handbook links the official Chinese EPUB and explains fixed-layout compatibility',()=>{
+  const html=read('books/zhuyin-handbook/index.html');
+  for(const value of ['國語注音符號手冊','教育部','CC BY-ND 3.0 TW','https://language.moe.gov.tw/001/Upload/files/site_content/M0001/juyin/epub/zh.epub','EPUB 3 固定版面','讀音與筆順動畫'])assert.ok(html.includes(value),value);
+  assert.doesNotMatch(html,/<dt>出版日期/);
+  assert.deepEqual(readFileSync(path.join(root,'images/covers/zhuyin-handbook.png')),readFileSync('public/images/covers/zhuyin-handbook.png'));
+});

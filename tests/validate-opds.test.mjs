@@ -280,7 +280,9 @@ changeBook('non-EPUB indirect MIME', SOCIETY, (xml) => xml.replace('<opds:indire
 changeBook('extra indirect acquisition attributes', SOCIETY, (xml) => xml.replace('<opds:indirectAcquisition type="application/epub+zip"/>', '<opds:indirectAcquisition type="application/epub+zip" title="extra"/>'));
 changeBook('nested indirect acquisition child', SOCIETY, (xml) => xml.replace('<opds:indirectAcquisition type="application/epub+zip"/>', '<opds:indirectAcquisition type="application/epub+zip"><opds:indirectAcquisition type="application/epub+zip"/></opds:indirectAcquisition>'));
 changeBook('wrong indirect acquisition namespace', SOCIETY, (xml) => xml.replace('<opds:indirectAcquisition type="application/epub+zip"/>', '<indirectAcquisition type="application/epub+zip"/>'));
-changeBook('Gumroad pretending to be a direct EPUB file', SOCIETY, (xml) => link(xml, ACQUISITION, (tag) => tag.replace('type="text/html"', 'type="application/epub+zip"').replace('<opds:indirectAcquisition type="application/epub+zip"/>', '')));
+mutation('Gumroad pretending to be a direct EPUB file', SOCIETY, (xml) => xml.replace(/<entry>[\s\S]*?<\/entry>/g, (entryXml) => entryXml.includes('gumroad.com')
+  ? link(entryXml, ACQUISITION, (tag) => tag.replace('type="text/html"', 'type="application/epub+zip"').replace('<opds:indirectAcquisition type="application/epub+zip"/>', ''))
+  : entryXml));
 changeBook('price on a generic acquisition', SOCIETY, (xml) => link(xml, ACQUISITION, (tag) => tag.replace('</link>', '<opds:price currencycode="USD">0</opds:price></link>')));
 
 // Cover host, filesystem boundary, and actual image bytes rather than filenames.

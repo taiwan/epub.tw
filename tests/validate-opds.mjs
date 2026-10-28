@@ -136,7 +136,7 @@ export function validateOpds(dist = 'dist', reference) {
       assert.ok(summary && summary.attributes.type === 'text' && summary.children.length === 0);
       assert.ok(trimWhitespace(summary.text));
       assert.ok(hasAuthor(entry), entryId);
-      assert.ok(text(entry, 'rights').startsWith('CC '), entryId);
+      assert.ok(/^(?:CC |CC0(?: |$))/.test(text(entry, 'rights')), entryId);
       assert.equal(links(entry, 'license').length, 1);
       assert.equal(links(entry, 'alternate')[0]?.attributes.href, entryId);
       const acquisitions = children(entry, 'link').filter((link) =>
