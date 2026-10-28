@@ -6,7 +6,7 @@ import { getBooks,getPosts,formatDate } from '../lib/catalog';
 const books=await getBooks();const posts=(await getPosts()).slice(0,3);
 ---
 <BaseLayout active="books">
-<section class="hero" aria-labelledby="hero-title"><div class="hero-copy"><h1 id="hero-title">一本書，<wbr/>一片新的海。</h1><p>收錄採用<a href="https://creativecommons.org/cc-licenses/">創用 CC 授權</a>或 <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 宣告</a>的 EPUB 電子書，<br class="subtitle-break"/>讓好書被更多人讀見。</p></div><Waves/></section>
+<section class="hero" aria-labelledby="hero-title"><div class="hero-copy"><h1 id="hero-title">閱讀是在島嶼之間航行。</h1><p>收錄<a href="https://creativecommons.org/cc-licenses/">創用 CC 授權</a>與<a href="https://creativecommons.org/public-domain/">公有領域</a>的 EPUB 電子書，<br class="subtitle-break"/>讓好書被更多人讀見。</p></div><Waves/></section>
 <section class="books-section" aria-labelledby="books-title"><div class="section-heading"><h2 id="books-title">書架</h2><span class="heading-rule"></span><p>依加入日期排序</p></div><div class="book-grid">{books.map((book)=><BookCard book={book}/>)}</div></section>
 <section class="news-section" aria-labelledby="news-title"><div class="section-heading"><h2 id="news-title">最新消息</h2><a class="text-link" href="/posts/">所有公告 <span aria-hidden="true">→</span></a></div><ul class="news-list">{posts.map((post)=><li><a href={`/posts/${post.id}.html`}><time datetime={post.data.publishedAt}>{formatDate(post.data.publishedAt)}</time><span>{post.data.title}</span><span class="news-arrow" aria-hidden="true">↗</span></a></li>)}</ul></section>
 </BaseLayout>

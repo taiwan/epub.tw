@@ -45,7 +45,6 @@ test('all canonical and Open Graph locations use the www host without changing p
   assert.ok(read('posts/2016-12-30-opds-catalog.html').includes('https://www.epub.tw/opds.xml'));
 });
 
-
 test('OPDS announcement images follow the page origin and retain original bytes',()=>{
   const html=read('posts/2016-12-30-opds-catalog.html');
   const images=[...html.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/g)].map((match)=>match[1]);
@@ -55,4 +54,24 @@ test('OPDS announcement images follow the page origin and retain original bytes'
     for(const origin of ['http://www.epub.tw','https://www.epub.tw'])assert.equal(new URL(src,origin).origin,origin);
     assert.deepEqual(readFileSync(path.join(root,src)),readFileSync(path.join('public',src)));
   }
+});
+
+test('homepage presents the final island slogan, explains CC/public-domain sources and uses a smaller responsive heading',()=>{
+  const html=read('index.html');
+  const hero=html.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(hero);
+  assert.match(hero,/<h1 id="hero-title">閱讀是在島嶼之間航行。<\/h1>/);
+  const subtitle=hero.match(/<p>([\s\S]*?)<\/p>/)?.[1];
+  const description='收錄創用 CC 授權與公有領域的 EPUB 電子書，讓好書被更多人讀見。';
+  assert.equal(subtitle?.replace(/<[^>]*>/g,''),description);
+  assert.ok(subtitle.includes('href="https://creativecommons.org/cc-licenses/"'));
+  assert.ok(subtitle.includes('href="https://creativecommons.org/public-domain/"'));
+  assert.ok(html.includes('name="description" content="'+description+'"'));
+  assert.ok(html.includes('property="og:description" content="'+description+'"'));
+  const css=readFileSync('src/styles/global.css','utf8');
+  assert.match(css,/\.hero h1\{[^}]*font-size:clamp\(34px,3\.5vw,50px\)/);
+  assert.match(css,/@media \(width<=800px\)\{[\s\S]*?\.hero h1\{font-size:38px\}/);
+  assert.match(css,/@media \(width<=600px\)\{[\s\S]*?\.hero h1\{[^}]*font-size:clamp\(25px,7\.8vw,31px\)/);
+  assert.doesNotMatch(css,/@media \(width<=370px\)\{[^@]*?\.hero h1/);
+  assert.ok(html.includes('<title>寶島書庫 epub.tw｜閱讀是在島嶼之間航行。</title>'));
 });
