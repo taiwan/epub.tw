@@ -1,0 +1,6 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props {book:CollectionEntry<'books'>;eager?:boolean;}
+const {book,eager=false}=Astro.props;
+---
+<div class="book-cover-stage">{book.data.cover?<img src={book.data.cover} alt={`${book.data.title}原版封面`} loading={eager?'eager':'lazy'} decoding="async"/>:<div class="cover-placeholder" aria-label={`${book.data.title}，暫無封面`}><span class="placeholder-title">{book.data.title}</span><span class="placeholder-author">{book.data.contributors.map((person)=>person.name).join('、')}</span><span class="placeholder-note">暫無封面</span></div>}</div>

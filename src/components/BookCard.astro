@@ -1,0 +1,10 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BookCover from './BookCover.astro';
+interface Props {book:CollectionEntry<'books'>;}
+const {book}=Astro.props;
+const creators=book.data.contributors.filter((person)=>!['譯者','翻譯','編者','編排'].includes(person.role));
+const displayedCreators=creators.length?creators:book.data.contributors;
+const sharedRole=displayedCreators.every((person)=>person.role===displayedCreators[0]?.role)?displayedCreators[0]?.role:undefined;
+---
+<article class="book-card"><a href={`/books/${book.id}/`} class="book-card-link"><BookCover book={book} eager/><h3>{book.data.title}</h3><p class="book-contributors">{displayedCreators.map((person)=>person.name).join('、')}{sharedRole && sharedRole!=='作者' && <span>｜{sharedRole}</span>}</p><span class="book-card-action">查看書籍 <span aria-hidden="true">→</span></span></a></article>

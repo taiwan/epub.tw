@@ -1,0 +1,28 @@
+name: 回報書目問題
+description: 失效來源、書目更正或授權疑慮。
+title: "[書目問題] "
+body:
+  - type: input
+    id: book
+    attributes:
+      label: 書名或書籍頁面
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: 問題類型
+      options:
+        - EPUB 來源失效
+        - 書目資料錯誤
+        - 授權疑慮
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: 問題與依據
+      description: 請提供狀況、網址與證據，不要上傳書檔或個人資料。
+    validations:
+      required: true

@@ -1,1 +1,6 @@
-_site
+node_modules/
+dist/
+.astro/
+_site/
+test-results/
+.DS_Store

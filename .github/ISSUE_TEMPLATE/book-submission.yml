@@ -1,0 +1,51 @@
+name: 推薦 EPUB 書籍
+description: 推薦明確採用創用 CC 授權且提供 EPUB 的來源。
+title: "[推薦書籍] "
+body:
+  - type: markdown
+    attributes:
+      value: 本站只收錄書目，不保存書檔。請勿上傳 EPUB，請提供來源網址。
+  - type: input
+    id: title
+    attributes:
+      label: 書名
+    validations:
+      required: true
+  - type: textarea
+    id: contributors
+    attributes:
+      label: 創作者與角色
+      description: 個人或組織皆可，請標示作者、採訪、譯者等角色。
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: 書籍簡介
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: 書籍來源頁面
+    validations:
+      required: true
+  - type: textarea
+    id: acquisition
+    attributes:
+      label: EPUB 取得網址及步驟
+      description: 可提供直接 EPUB 連結或能取得 EPUB 的網頁。
+    validations:
+      required: true
+  - type: textarea
+    id: license
+    attributes:
+      label: 創用 CC 授權及證據
+      description: 請提供名稱、版本、條款網址及來源聲明。
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: 其他資料（選填）
+      description: 原版封面、語言、分類、已確認出版日或線上閱讀網址。

@@ -1,0 +1,6 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts,formatDate } from '../../lib/catalog';
+const posts=await getPosts();
+---
+<BaseLayout title="最新消息" active="posts"><header class="page-heading"><p class="eyebrow">書庫記事</p><h1>最新消息</h1><p>關於書籍、閱讀，以及這座書庫的點滴。</p></header><ul class="news-list archive-list">{posts.map((post)=><li><a href={`/posts/${post.id}.html`}><time datetime={post.data.publishedAt}>{formatDate(post.data.publishedAt)}</time><span>{post.data.title}</span><span class="news-arrow" aria-hidden="true">↗</span></a></li>)}</ul></BaseLayout>

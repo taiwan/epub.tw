@@ -1,0 +1,10 @@
+---
+import { render } from 'astro:content';
+import type { GetStaticPaths,InferGetStaticPropsType } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts,formatDate } from '../../lib/catalog';
+export const getStaticPaths=(async()=>(await getPosts()).map((post)=>({params:{slug:post.id},props:{post}}))) satisfies GetStaticPaths;
+type Props=InferGetStaticPropsType<typeof getStaticPaths>;
+const {post}=Astro.props;const {Content}=await render(post);
+---
+<BaseLayout title={post.data.title} active="posts"><nav class="breadcrumbs" aria-label="麵包屑"><a href="/posts/">最新消息</a><span aria-hidden="true">/</span><span>書庫記事</span></nav><article class="post-layout"><header class="page-heading"><p class="eyebrow"><time datetime={post.data.publishedAt}>{formatDate(post.data.publishedAt)}</time> <span aria-hidden="true">／</span> {post.data.author}</p><h1>{post.data.title}</h1></header><div class="archive-note">這篇是書庫的歷史公告，保留原文記錄；文中外部連結及軟體資訊可能已變更。現行閱讀方式請見<a href="/about.html#reading">關於書庫</a>。</div><div class="prose"><Content/></div><div class="page-end"><a class="text-link" href="/posts/">← 所有公告</a></div></article></BaseLayout>
