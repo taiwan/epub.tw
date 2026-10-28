@@ -94,3 +94,26 @@ test('announcements omit the withdrawn origin post and share a notice-free templ
   assert.doesNotMatch(readFileSync('src/pages/posts/[slug].astro','utf8'),/archive-note|歷史公告|現行閱讀方式請見/);
   assert.doesNotMatch(readFileSync('src/styles/global.css','utf8'),/archive-note/);
 });
+
+
+test('site-renovation announcement preserves the submitted three paragraphs and appears once as newest',()=>{
+  const id='2026-10-28-site-renovation';
+  const paragraphs=[
+    '本站改版翻新了，藉由 AI Agent 的幫助，讓我一直以來擱置的事得以實現。',
+    '雖外表可以輕易轉變，但內在無法就因此一併脫胎換骨，依然還是蒐羅寥少，乏善可陳。',
+    '歡迎大家提供合乎 CC 授權或是已進到公有領域可供上架的 EPUB 書籍，希望之後書庫可以越來越充實。',
+  ];
+  const source=readFileSync('src/content/posts/'+id+'.md','utf8');
+  assert.equal(source.split('---\n')[2],paragraphs.join('\n\n')+'\n');
+  assert.equal(readdirSync('src/content/posts').filter((file)=>readFileSync('src/content/posts/'+file,'utf8').includes('title: "網站翻新"')).length,1);
+  const html=read('posts/'+id+'.html');
+  assert.ok(html.includes('<h1>網站翻新</h1>'));
+  assert.ok(html.includes('datetime="2026-10-28"'));
+  const body=html.match(/<div class="prose">([\s\S]*?)<\/div>/)?.[1];
+  assert.equal(body,paragraphs.map((paragraph)=>'<p>'+paragraph+'</p>').join('\n')+'\n');
+  for(const page of ['index.html','posts/index.html']){
+    const links=[...read(page).matchAll(/href="\/posts\/([^"/]+)\.html"/g)].map((m)=>m[1]);
+    assert.equal(links[0],id);
+    assert.equal(links.filter((value)=>value===id).length,1);
+  }
+});
