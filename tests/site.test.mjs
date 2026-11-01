@@ -2,12 +2,39 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync,existsSync,statSync} from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 const root=path.resolve('dist');
 const read=(file)=>readFileSync(path.join(root,file),'utf8');
 const walk=(dir)=>readdirSync(dir,{withFileTypes:true}).flatMap((e)=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
 test('legacy routes, per-book pages and domain files exist',()=>{for(const file of ['index.html','404.html','about.html','posts/index.html','posts/2016-12-30-opds-catalog.html','posts/2017-01-17-usa-birth.html','books/young-power/index.html','books/monkeypotion/index.html','books/usa-birth/index.html','CNAME','.nojekyll'])assert.ok(existsSync(path.join(root,file)),file);assert.equal(read('CNAME').trim(),'www.epub.tw');});
 test('local page links, images and fragment targets resolve',()=>{for(const page of walk(root).filter((p)=>p.endsWith('.html'))){const html=readFileSync(page,'utf8');assert.doesNotMatch(html,/\{\{\s*site\./);const base=new URL('/'+path.relative(root,page).replace(/index\.html$/,''),'https://www.epub.tw');for(const match of html.matchAll(/\b(?:href|src)="([^"]+)"/g)){const raw=match[1].replaceAll('&amp;','&');if(!raw.startsWith('/')&&!raw.startsWith('#'))continue;const url=new URL(raw,base);let target=path.join(root,decodeURIComponent(url.pathname));if(existsSync(target)&&statSync(target).isDirectory())target=path.join(target,'index.html');assert.ok(existsSync(target),`${page} -> ${raw}`);if(url.hash&&target.endsWith('.html'))assert.ok(readFileSync(target,'utf8').includes(`id="${decodeURIComponent(url.hash.slice(1))}"`),`${page} -> ${raw}`);}}});
-test('homepage sorts actual content by added date and puts books before announcements',()=>{const home=read('index.html');const ids=[...home.matchAll(/class="book-card"[\s\S]*?href="\/books\/([^/]+)\//g)].map((m)=>m[1]);const expected=readdirSync('src/content/books').filter((f)=>f.endsWith('.md')).map((f)=>({id:f.slice(0,-3),date:readFileSync('src/content/books/'+f,'utf8').match(/^addedAt: "([^"]+)"/m)[1]})).sort((a,b)=>b.date.localeCompare(a.date)||a.id.localeCompare(b.id,'en')).map((b)=>b.id);assert.deepEqual(ids,expected);assert.ok(home.indexOf('class="books-section"')<home.indexOf('class="news-section"'));for(const title of ['開始提供 OPDS 編目','《美國的誕生》上架','我們在海洋閱讀'])assert.ok(home.includes(title));assert.doesNotMatch(home,/<script\b|<select|type="search"/);});
+test('homepage sorts by update date, retaining added-date and ID ties',()=>{
+  const home=read('index.html');
+  const ids=[...home.matchAll(/class="book-card"[\s\S]*?href="\/books\/([^/]+)\//g)].map((m)=>m[1]);
+  const expected=readdirSync('src/content/books').filter((f)=>f.endsWith('.md')).map((f)=>{
+    const source=readFileSync('src/content/books/'+f,'utf8');
+    return {id:f.slice(0,-3),updatedAt:source.match(/^updatedAt: "([^"]+)"/m)[1],addedAt:source.match(/^addedAt: "([^"]+)"/m)[1]};
+  }).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt)||b.addedAt.localeCompare(a.addedAt)||a.id.localeCompare(b.id,'en')).map((b)=>b.id);
+  assert.deepEqual(ids,expected);
+  assert.equal(ids[0],'usa-birth');
+  assert.equal(ids.length,6);
+  assert.ok(home.includes('依更新日期排序'));
+  assert.ok(home.indexOf('class="books-section"')<home.indexOf('class="news-section"'));
+  for(const title of ['《美國的誕生》新版發布','《美國的誕生》上架','我們在海洋閱讀'])assert.ok(home.includes(title));
+  assert.doesNotMatch(home,/<script\b|<select|type="search"/);
+});
+test('USA birth points to the verified 2.0.1 release in the book page and OPDS',()=>{
+  const url='https://github.com/kidwm/usa-birth-epub/releases/download/2.0.1/usa-birth.epub';
+  const page=read('books/usa-birth/index.html');
+  assert.ok(page.includes(url));
+  assert.ok(page.includes('datetime="2026-11-01"'));
+  assert.ok(page.includes('datetime="2017-01-17"'));
+  const feed=read('categories/history.xml');
+  const entry=[...feed.matchAll(/<entry>[\s\S]*?<\/entry>/g)].map((m)=>m[0]).find((xml)=>xml.includes('<title>美國的誕生</title>'));
+  assert.ok(entry?.includes(url));
+  assert.ok(entry?.includes('<updated>2026-11-01T00:00:00Z</updated>'));
+  assert.doesNotMatch(page,/releases\/download\/1\.0\//);
+});
 test('book pages preserve CC and distinguish direct from indirect EPUB acquisition',()=>{const young=read('books/young-power/index.html');for(const text of ['前往 Gumroad 取得 EPUB','依該站的流程取得 EPUB','CC BY-NC-SA 3.0 TW','郝明義','陳季芳','採訪'])assert.ok(young.includes(text));assert.match(read('books/monkeypotion/index.html'),/暫無封面/);assert.match(read('books/usa-birth/index.html'),/下載 EPUB/);for(const id of ['young-power','monkeypotion','usa-birth'])assert.doesNotMatch(read(`books/${id}/index.html`),/下載 PDF|下載 MOBI|lastCheckedAt|<dt>出版日期/);});
 test('output hosts no EPUB files and does not transform original covers',()=>{assert.equal(walk(root).filter((p)=>/\.(epub|mobi|azw3?)$/i.test(p)).length,0);for(const file of ['young-power-original.jpg','usa-birth.png'])assert.deepEqual(readFileSync(path.join(root,'images/covers',file)),readFileSync(path.join('public/images/covers',file)));});
 test('every HTML page has language, canonical URL, skip link and one main heading',()=>{for(const page of walk(root).filter((p)=>p.endsWith('.html'))){const html=readFileSync(page,'utf8');assert.match(html,/<html lang="zh-Hant-TW"/);assert.match(html,/<title>[^<]+<\/title>/);assert.match(html,/rel="canonical" href="https:\/\/www\.epub\.tw\//);assert.match(html,/class="skip-link" href="#main"/);assert.equal((html.match(/<h1\b/g)??[]).length,1,page);assert.equal((html.match(/<main\b/g)??[]).length,1,page);}});
@@ -96,7 +123,7 @@ test('announcements omit the withdrawn origin post and share a notice-free templ
 });
 
 
-test('site-renovation announcement preserves the submitted three paragraphs and appears once as newest',()=>{
+test('site-renovation announcement preserves the submitted three paragraphs and remains listed once',()=>{
   const id='2026-10-28-site-renovation';
   const paragraphs=[
     '本站改版翻新了，藉由 AI Agent 的幫助，讓我一直以來擱置的事得以實現。',
@@ -111,6 +138,36 @@ test('site-renovation announcement preserves the submitted three paragraphs and 
   assert.ok(html.includes('datetime="2026-10-28"'));
   const body=html.match(/<div class="prose">([\s\S]*?)<\/div>/)?.[1];
   assert.equal(body,paragraphs.map((paragraph)=>'<p>'+paragraph+'</p>').join('\n')+'\n');
+  for(const page of ['index.html','posts/index.html']){
+    const links=[...read(page).matchAll(/href="\/posts\/([^"/]+)\.html"/g)].map((m)=>m[1]);
+    assert.ok(links.includes(id));
+    assert.equal(links.filter((value)=>value===id).length,1);
+  }
+});
+
+
+test('USA birth uses the unchanged release cover in cards, detail, and OPDS',()=>{
+  const cover='/images/covers/usa-birth-2.0.1.jpg';
+  for(const page of ['index.html','books/usa-birth/index.html','categories/history.xml'])assert.ok(read(page).includes(cover),page);
+  const original=readFileSync('public'+cover);
+  assert.equal(createHash('sha256').update(original).digest('hex'),'32428636477be5957b52c14b44643529f98ae40ee4328d19121e31c18291faae');
+  assert.deepEqual(readFileSync(path.join(root,cover)),original);
+});
+
+
+test('USA birth announcement shows the approved text and new cover once, newest in both lists',()=>{
+  const id='2026-11-01-usa-birth-update';
+  const html=read('posts/'+id+'.html');
+  assert.ok(html.includes('<h1>《美國的誕生》新版發布</h1>'));
+  assert.ok(html.includes('datetime="2026-11-01"'));
+  const body=html.match(/<div class="prose">([\s\S]*?)<\/div>/)?.[1];
+  const expected=[
+    '<p>《美國的誕生》EPUB 更新了。</p>',
+    '<p><img src="/images/covers/usa-birth-2.0.1.jpg" alt="《美國的誕生》新版封面"></p>',
+    '<p>這次重新繪製了封面，也收錄更多歷史插圖與地圖，全書共 202 張。原本沒有插圖的章節也補上了圖片，現在全書 50 章都有插圖。</p>',
+    '<p>另外調整了圖片與圖說的排版，正文維持原文，歡迎<a href="/books/usa-birth/">下載新版閱讀</a>。</p>',
+  ];
+  assert.equal(body,expected.join('\n')+'\n');
   for(const page of ['index.html','posts/index.html']){
     const links=[...read(page).matchAll(/href="\/posts\/([^"/]+)\.html"/g)].map((m)=>m[1]);
     assert.equal(links[0],id);

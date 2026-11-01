@@ -24,7 +24,7 @@ npm run preview
 - `category` 保留 biography/history/society/technology，`language` 必填；`summary` 為簡介，可另寫 Markdown 正文與 `readingUrl`。
 - 公告放在 `src/content/posts/YYYY-MM-DD-slug.md`，保留 `/posts/YYYY-MM-DD-slug.html` 網址。
 
-書架按加入日期新到舊排序，同日以 ID 排序。第一版無搜尋、分類篩選、後台或登入。透過 GitHub Issue／PR 新增及更正，收到問題時核對來源、授權與失效連結，不做排程掃描。請勿提交 EPUB、憑證或個人資料。
+首頁書架按 `updatedAt` 新到舊排序；同日按 `addedAt` 新到舊，再以 ID 排序。書目或 EPUB 版本有實質更新才調整 `updatedAt`，不因建置而改動。OPDS 取得目錄仍按加入日期排序。第一版無搜尋、分類篩選、後台或登入。透過 GitHub Issue／PR 新增及更正，收到問題時核對來源、授權與失效連結，不做排程掃描。請勿提交 EPUB、憑證或個人資料。
 
 ## OPDS 與部署
 

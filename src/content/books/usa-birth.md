@@ -4,15 +4,15 @@ contributors:
   - name: "藍弋丰"
     role: "作者"
 summary: "美國是如何誕生，其過程高潮迭起，精彩萬分，也可給我們一些啟發，明白美國是如何從一個新生小國，逐漸轉變成為今日的世界獨強國家。"
-cover: "/images/covers/usa-birth.png"
+cover: "/images/covers/usa-birth-2.0.1.jpg"
 category: history
 language: zh-Hant
 addedAt: "2017-01-17"
-updatedAt: "2026-10-28"
+updatedAt: "2026-11-01"
 sourceUrl: "https://github.com/kidwm/usa-birth-epub"
 acquisition:
   - type: direct
-    url: "https://github.com/kidwm/usa-birth-epub/releases/download/1.0/usa-birth.epub"
+    url: "https://github.com/kidwm/usa-birth-epub/releases/download/2.0.1/usa-birth.epub"
     label: "下載 EPUB"
 license:
   name: "CC BY-NC-ND 3.0 TW"

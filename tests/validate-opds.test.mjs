@@ -294,33 +294,33 @@ for (const [name, host] of [
 ]) {
   changeBook(`cover URL with ${name}`, HISTORY, (xml) => link(xml, 'http://opds-spec.org/image', (tag) => tag.replace('https://www.epub.tw/', `https://${host}/`)));
 }
-changeBook('cover extension with incorrect declared MIME', HISTORY, (xml) => link(xml, 'http://opds-spec.org/image', (tag) => tag.replace('image/png', 'image/jpeg')));
-changeBook('cover URL escaping the build directory after percent-decoding', HISTORY, (xml) => link(xml, 'http://opds-spec.org/image', (tag) => tag.replace('/images/covers/usa-birth.png', '/images/%2e%2e%2f%2e%2e%2fescape.png')), /Path outside build/);
+changeBook('cover extension with incorrect declared MIME', HISTORY, (xml) => link(xml, 'http://opds-spec.org/image', (tag) => tag.replace('image/jpeg', 'image/png')));
+changeBook('cover URL escaping the build directory after percent-decoding', HISTORY, (xml) => link(xml, 'http://opds-spec.org/image', (tag) => tag.replace('/images/covers/usa-birth-2.0.1.jpg', '/images/%2e%2e%2f%2e%2e%2fescape.png')), /Path outside build/);
 
 test('rejects missing cover file', (t) => {
   const dist = fixture(t);
-  rmSync(join(dist, 'images/covers/usa-birth.png'));
+  rmSync(join(dist, 'images/covers/usa-birth-2.0.1.jpg'));
   assert.throws(() => validateOpds(dist));
 });
 
 test('rejects a directory where a cover file is required', (t) => {
   const dist = fixture(t);
-  const path = join(dist, 'images/covers/usa-birth.png');
+  const path = join(dist, 'images/covers/usa-birth-2.0.1.jpg');
   rmSync(path);
   mkdirSync(path);
   assert.throws(() => validateOpds(dist));
 });
 
-test('rejects bogus image bytes even when filename and MIME both say PNG', (t) => {
+test('rejects bogus image bytes even when filename and MIME both say JPEG', (t) => {
   const dist = fixture(t);
-  writeFileSync(join(dist, 'images/covers/usa-birth.png'), 'not an image');
+  writeFileSync(join(dist, 'images/covers/usa-birth-2.0.1.jpg'), 'not an image');
   assert.throws(() => validateOpds(dist));
 });
 
 for (const signature of ['GIF87a', 'GIF89a']) {
   test(`accepts genuine ${signature} image signature with GIF MIME`, (t) => {
     const dist = fixture(t);
-    edit(dist, HISTORY, (xml) => link(xml, 'http://opds-spec.org/image', (tag) => tag.replace('usa-birth.png', 'test.gif').replace('image/png', 'image/gif')));
+    edit(dist, HISTORY, (xml) => link(xml, 'http://opds-spec.org/image', (tag) => tag.replace('usa-birth-2.0.1.jpg', 'test.gif').replace('image/jpeg', 'image/gif')));
     writeFileSync(join(dist, 'images/covers/test.gif'), Buffer.from(signature + '\x01\x00'));
     assert.match(validateOpds(dist), /^PASS:/);
   });
@@ -353,7 +353,7 @@ test('CLI exits nonzero and never reports success for an invalid catalog', (t) =
 
 test('rejects high-bit bytes that ASCII decoding would mistake for a GIF signature', (t) => {
   const dist = fixture(t);
-  edit(dist, HISTORY, (xml) => link(xml, 'http://opds-spec.org/image', (tag) => tag.replace('usa-birth.png', 'false.gif').replace('image/png', 'image/gif')));
+  edit(dist, HISTORY, (xml) => link(xml, 'http://opds-spec.org/image', (tag) => tag.replace('usa-birth-2.0.1.jpg', 'false.gif').replace('image/jpeg', 'image/gif')));
   writeFileSync(join(dist, 'images/covers/false.gif'), Buffer.from([0xc7, 0xc9, 0xc6, 0xb8, 0xb7, 0xe1, 1, 0]));
   assert.throws(() => validateOpds(dist));
 });
